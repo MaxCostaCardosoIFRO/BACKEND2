@@ -3,12 +3,22 @@ const colecaoUf = require('./dados/dados.js');
 
 const app = express();
 
+const buscarUfsPorNome = (nomeUf) => {
+    return colecaoUf.filter(uf => uf.nome.toLowerCase().includes(nomeUf.toLowerCase()));
+}
+
 app.get('/ufs', (req, res) => {
 
-    res.json(colecaoUf.colecaoUf)
+    const nomeut = req.query.busca;
+    const resultado = nomeUf ? buscarUfsPorNome(nomeUf) : colecaoUf;
+    if (resultado.length > 0) {
+        res.json(resultado);
+    } else {
+        res.status(404).send({ "erro": "Nenhuma UF encontrada" });
+    }
+});
 
 
-})
 
 app.get('/ufs/:iduf', (req, res) => {
 
